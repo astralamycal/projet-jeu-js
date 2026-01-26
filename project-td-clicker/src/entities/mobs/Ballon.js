@@ -1,10 +1,12 @@
-class Ballon {
+import { Entity } from "../Entity";
+export class Ballon extends Entity {
   #hp;
   #speed;
   #texturePath;
   #isAlive;
 
   constructor(hp, speed, texturePath) {
+    super();
     this.#hp = hp;
     this.#speed = speed;
     this.#texturePath = texturePath;
@@ -44,4 +46,6 @@ class Ballon {
     }
     return false;
   }
+
+  update() {}
 }
