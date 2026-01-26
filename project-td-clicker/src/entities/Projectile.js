@@ -1,0 +1,4 @@
+class Projectile {
+  #damages;
+  #speed;
+}
