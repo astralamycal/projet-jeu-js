@@ -1,112 +1,65 @@
-import "../utils/data/mapPaths.json";
+// src/entities/Entity.js
+import { GameObject } from "../components/GameObject.js";
 import mapPaths from "../utils/data/mapPaths.json";
 
-export class Entity {
+export class Entity extends GameObject {
   #waypoints;
-  #position = {
-    x: 0,
-    y: 0,
-  };
+  #size = { width: 10, height: 10 };
+  #waypointIndex = 1;
+  #speed = 2; // Ajout d'une vitesse modifiable
+  #isAlive = true;
 
-  #size = {
-    width: 10,
-    height: 10,
-  };
+  constructor(width, height, mapName) {
+    // On initialise la position au premier waypoint
+    const paths = mapPaths[mapName];
+    if (!paths) throw new Error(`Map ${mapName} introuvable`);
 
-  #center = {
-    x: null,
-    y: null,
-  };
+    super(paths[0].x, paths[0].y); // Niveau 1 d'héritage
 
-  #waypointIndex = 1; // says which waypoint is tracked
+    this.#size.width = width;
+    this.#size.height = height;
+    this.#waypoints = paths;
 
-  constructor(width, height, mapName, x, y) {
-    if (typeof width === "number" && width > 0) {
-      this.#size.width = width;
-    } else {
-      throw new Error("Width of entity must be a number greater than 0.");
-    }
-
-    if (typeof height === "number" && height > 0) {
-      this.#size.height = height;
-    } else {
-      throw new Error("Height of entity must be a number greater than 0.");
-    }
-
-    this.#waypoints = this.#getPath(mapName);
-
-    if (typeof x === "number") {
-      this.#position.x = x;
-    } else if (typeof x !== "undefined") {
-      throw new Error("X coordinate must be a number.");
-    } else {
-      this.#position.x = this.#waypoints[0].x;
-    }
-
-    if (typeof y === "number") {
-      this.#position.y = y;
-    } else if (typeof y !== "undefined") {
-      throw new Error("Y coordinate must be a number");
-    } else {
-      this.#position.y = this.#waypoints[0].y;
-    }
-    //center used to center entity on track
-    this.#setCenter();
-
-    //manual set of object on center of track for start
-    this.#position.x -= this.#center.x - this.#position.x;
-    this.#position.y -= this.#center.y - this.#position.y;
+    // On ajuste la position pour centrer l'entité
+    this.x -= this.#size.width / 2;
+    this.y -= this.#size.height / 2;
   }
 
-  #setCenter() {
-    this.#center.x = this.#position.x + this.#size.width / 2;
-    this.#center.y = this.#position.y + this.#size.height / 2;
+  get isAlive() {
+    return this.#isAlive;
   }
 
-  #getPath(mapName) {
-    const currentMapPath = mapPaths[mapName];
-    if (typeof currentMapPath !== "undefined") {
-      return currentMapPath;
+  update() {
+    if (this.#waypointIndex >= this.#waypoints.length) {
+      this.#isAlive = false;
+      return;
     }
-    throw new Error("Map name not found in data file");
-  }
 
-  #draw(canvas) {
-    canvas.fillStyle = "red";
-    canvas.fillRect(
-      this.#position.x,
-      this.#position.y,
-      this.#size.width,
-      this.#size.height,
-    );
-  }
+    const target = this.#waypoints[this.#waypointIndex];
 
-  update(canvas) {
-    this.#draw(canvas);
+    // Calcul du centre actuel pour le pathfinding
+    const centerX = this.x + this.#size.width / 2;
+    const centerY = this.y + this.#size.height / 2;
 
-    //pathfinding
-    let waypoint = this.#waypoints[this.#waypointIndex];
-    let yDistance = waypoint.y - this.#center.y;
-    let xDistance = waypoint.x - this.#center.x;
-    let angle = Math.atan2(yDistance, xDistance);
+    const distY = target.y - centerY;
+    const distX = target.x - centerX;
+    const angle = Math.atan2(distY, distX);
 
-    this.#position.x += Math.cos(angle);
-    this.#position.y += Math.sin(angle);
+    // Déplacement basé sur la vitesse
+    this.x += Math.cos(angle) * this.#speed;
+    this.y += Math.sin(angle) * this.#speed;
 
-    this.#setCenter();
-
-    //checks arrival towards waypoint
+    // Vérification de l'arrivée au waypoint (marge d'erreur de la vitesse)
     if (
-      Math.round(this.#center.x) === waypoint.x &&
-      Math.round(this.#center.y) === waypoint.y
+      Math.abs(centerX - target.x) < this.#speed &&
+      Math.abs(centerY - target.y) < this.#speed
     ) {
-      if (this.#waypointIndex < this.#waypoints.length - 1) {
-        this.#waypointIndex++;
-      } else {
-        console.log("DAMAGE FUNCTION"); // ? call damage function here
-      }
-
-      console.log;
+      this.#waypointIndex++;
     }
+  }
+
+  draw(ctx) {
+    ctx.fillStyle = "red";
+    ctx.fillRect(this.x, this.y, this.#size.width, this.#size.height);
   }
 }

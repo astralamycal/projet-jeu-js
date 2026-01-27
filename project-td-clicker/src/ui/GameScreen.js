@@ -10,6 +10,7 @@ export class GameScreen extends Screen {
 
   constructor(canvas, ctx) {
     super(canvas, ctx); // Appel au constructeur de Screen
+    this.#entities.push(new Entity(30, 30, "map1"));
     this.#init();
   }
 
@@ -86,7 +87,7 @@ export class GameScreen extends Screen {
   }
 
   /**
-   * Sauvegarde la progression [cite: 114]
+   * Sauvegarde la progression
    */
   saveProgress() {
     Storage.save("td_save", { score: this.#score });

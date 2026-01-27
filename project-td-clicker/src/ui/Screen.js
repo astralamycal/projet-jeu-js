@@ -16,6 +16,16 @@ export class Screen {
     return this.#ctx;
   }
 
+  createElement(tagName, attributes = {}) {
+    const element = document.createElement(tagName);
+
+    for (const [key, value] of Object.entries(attributes)) {
+      element.setAttribute(key, value);
+    }
+
+    return element;
+  }
+
   update() {} // À définir par les enfants
   draw() {} // À définir par les enfants
 }

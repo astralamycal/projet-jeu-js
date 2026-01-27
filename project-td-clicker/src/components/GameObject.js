@@ -1,25 +1,27 @@
-class GameObject {
-  #sprite;
-  #position;
+export class GameObject {
+  #x;
+  #y;
 
-  constructor(sprite, position) {
-    this.#sprite = sprite;
-    this.#position = position;
+  constructor(x, y) {
+    if (this.constructor === GameObject) throw new Error("Classe abstraite");
+    this.#x = x;
+    this.#y = y;
   }
 
-  getSprite() {
-    return this.#sprite;
+  // Accesseurs sécurisés (Encapsulation)
+  get x() {
+    return this.#x;
+  }
+  set x(value) {
+    this.#x = value;
+  }
+  get y() {
+    return this.#y;
+  }
+  set y(value) {
+    this.#y = value;
   }
 
-  getPosition() {
-    return this.#position;
-  }
-
-  setSprite(sprite) {
-    this.#sprite = sprite;
-  }
-
-  setPosition(position) {
-    this.#position = position;
-  }
+  update() {}
+  draw(ctx) {}
 }

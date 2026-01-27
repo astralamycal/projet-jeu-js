@@ -1,4 +1,5 @@
 import { Game } from "./core/Game.js";
+import { Entity } from "./entities/Entity.js";
 
 // Attendre que le DOM soit prêt pour éviter les erreurs d'accès [cite: 55]
 window.addEventListener("DOMContentLoaded", () => {
@@ -8,3 +9,6 @@ window.addEventListener("DOMContentLoaded", () => {
     console.error("Échec critique du lancement :", e.message);
   }
 });
+
+const ennemy = new Entity(30, 30, "map1");
+console.log(ennemy);
