@@ -22,7 +22,11 @@ export class Ballon extends Entity {
   }
 
   update(dt) {
-    if (this.#waypointIndex >= this.#waypoints.length) return;
+    if (this.#waypointIndex >= this.#waypoints.length) {
+      this.takeDamage(999); // Meurt pour être nettoyé par le Container
+      // ICI : déclencher un événement "perte de vie" si tu veux
+      return;
+    }
 
     const target = this.#waypoints[this.#waypointIndex];
     const dx = target.x - this.center.x;

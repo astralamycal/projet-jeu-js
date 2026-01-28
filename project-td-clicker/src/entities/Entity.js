@@ -36,6 +36,15 @@ export class Entity extends GameObject {
     return this.#speed;
   } // Accesseur pour les classes filles
 
+  takeDamage(amount) {
+    this.#hp -= amount;
+    if (this.#hp < 0) this.#hp = 0;
+
+    // Log pour le debug (tu pourras le retirer plus tard)
+    console.log(`Dégâts reçus : ${amount}. PV restants : ${this.#hp}`);
+  }
+
+  // On transforme isAlive e  n méthode pour vérifier les PV en temps réel
   isAlive() {
     return this.#hp > 0;
   }

@@ -1,0 +1,26 @@
+[
+  {
+    "roundNumber": 1,
+    "count": 5,
+    "speed": 1.5,
+    "hp": 1,
+    "color": "red",
+    "interval": 1200
+  },
+  {
+    "roundNumber": 2,
+    "count": 10,
+    "speed": 2.0,
+    "hp": 2,
+    "color": "blue",
+    "interval": 1000
+  },
+  {
+    "roundNumber": 3,
+    "count": 15,
+    "speed": 2.5,
+    "hp": 3,
+    "color": "green",
+    "interval": 800
+  }
+]
