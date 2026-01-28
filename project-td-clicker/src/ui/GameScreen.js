@@ -1,15 +1,18 @@
 import { Screen } from "./Screen.js";
 import { Map } from "../entities/Map.js";
 import { BallonManager } from "../managers/BallonManager.js";
+import { PlacementTileManager } from "../managers/PlacementTileManager.js";
 
 export class GameScreen extends Screen {
   #map;
   #ballonManager;
+  #placementTileManager;
 
   constructor(canvas, ctx) {
     super(canvas, ctx);
     this.#map = new Map("./public/assets/map1.png");
     this.#ballonManager = new BallonManager("map1");
+    this.#placementTileManager = new PlacementTileManager(ctx);
 
     // Écouteur pour lancer les rounds
     window.addEventListener("keydown", (e) => {
@@ -19,6 +22,7 @@ export class GameScreen extends Screen {
 
   update(dt) {
     this.#ballonManager.update(dt);
+    this.#placementTileManager.update();
   }
 
   draw() {
