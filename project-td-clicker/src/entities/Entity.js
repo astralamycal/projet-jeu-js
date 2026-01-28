@@ -1,39 +1,44 @@
 import { GameObject } from "../components/GameObject.js";
 
-/**
- * Niveau 2 d'héritage : Gère les propriétés physiques et de mouvement de base.
- */
 export class Entity extends GameObject {
-  #width;
-  #height;
-  #speed;
-  #isAlive = true;
+  #width = 10;
+  #height = 10;
+  #hp = 1;
 
-  constructor(x, y, width, height, speed) {
+  constructor(x, y, width, height, hp) {
     super(x, y);
 
-    // Robustesse : Validation des données
-    if (width <= 0 || height <= 0) throw new Error("Dimensions invalides");
+    if (typeof width !== "number" || width < 0) {
+      throw new Error("Width must be a number greater than 0.");
+    }
+
+    if (typeof height !== "number" || height < 0) {
+      throw new Error("Height must be a number greater than 0.");
+    }
+
+    if (typeof hp !== "number" || hp <= 0) {
+      throw new Error("Hp must be a number greater than 0.");
+    }
 
     this.#width = width;
     this.#height = height;
-    this.#speed = speed;
+    this.#hp = hp;
   }
 
   get width() {
     return this.#width;
   }
+
   get height() {
     return this.#height;
   }
-  get speed() {
-    return this.#speed;
+
+  get hp() {
+    return this.#hp;
   }
-  get isAlive() {
-    return this.#isAlive;
-  }
-  set isAlive(value) {
-    this.#isAlive = value;
+
+  isAlive() {
+    return this.#hp > 0;
   }
 
   get center() {
