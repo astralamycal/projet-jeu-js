@@ -1,4 +1,6 @@
-class BallonManager {
+import { Ballon } from "../entities/mobs/Ballon.js";
+
+export class BallonManager {
   #ballonList = [];
 
   constructor() {}

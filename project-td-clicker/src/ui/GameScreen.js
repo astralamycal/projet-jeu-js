@@ -1,95 +1,80 @@
 import { Screen } from "./Screen.js";
-//import { Storage } from "../utils/Storage.js";
+import { Ballon } from "../entities/mobs/Ballon.js";
+import { Container } from "../components/Container.js";
 
+/**
+ * Écran de jeu principal.
+ * Gère l'affichage de la map et la coordination des entités (Composite).
+ */
 export class GameScreen extends Screen {
-  // Propriétés privées pour l'encapsulation
   #mapImage = new Image();
   #isLoaded = false;
-  #entities = []; // Conteneur pour le pattern Composite
-  #score = 0;
+  #entityManager = new Container(); // Le Composite qui contient tes ballons
+  #mapName = "map1"; // Nom correspondant à ta clé dans mapPaths.json
 
   constructor(canvas, ctx) {
-    super(canvas, ctx); // Appel au constructeur de Screen
-    this.#entities.push(new Entity(30, 30, "map1"));
+    super(canvas, ctx); // Héritage de Screen
     this.#init();
   }
 
   /**
-   * Initialisation asynchrone des assets et des données
+   * Initialisation asynchrone des ressources.
    */
   async #init() {
     try {
-      // Chargement de l'image de la map
+      // Chargement de l'image de fond (Map)
       this.#mapImage.src = "./public/assets/map1.png";
+
       this.#mapImage.onload = () => {
         this.#isLoaded = true;
+        // On fait apparaître un premier ballon une fois que tout est prêt
+        this.#spawnWave();
       };
 
-      // Gestion d'erreur de chargement
       this.#mapImage.onerror = () => {
         throw new Error("Impossible de charger l'image de la map.");
       };
-
-      // Récupération du score depuis le localStorage
-      const savedData = Storage.load("td_save");
-      if (savedData) {
-        this.#score = savedData.score || 0;
-      }
     } catch (error) {
       console.error(`[GameScreen Error]: ${error.message}`);
     }
   }
 
   /**
-   * Mise à jour de la logique du jeu (Appelée par la loop de Game.js)
+   * Exemple de création d'une entité (Ballon - Niveau 3 d'héritage)
    */
-  update() {
+  #spawnWave() {
+    try {
+      // Paramètres : mapName, hp, speed, color, reward
+      const redBallon = new Ballon(this.#mapName, 10, 2, "red", 5);
+
+      // On l'ajoute au container (Composite)
+      this.#entityManager.add(redBallon);
+    } catch (e) {
+      console.error("Erreur lors du spawn du ballon :", e.message);
+    }
+  }
+  update(dt) {
     if (!this.#isLoaded) return;
 
-    // Pattern Composite : Mise à jour de toutes les entités
-    this.#entities.forEach((entity) => {
-      if (entity.update) {
-        entity.update(this.ctx);
-      }
-    });
-
-    // Exemple : on vérifie si des entités doivent être supprimées
-    this.#entities = this.#entities.filter((entity) => entity.isAlive);
+    // Le GameScreen délègue la mise à jour au Container (Composite)
+    this.#entityManager.update(dt);
   }
 
   /**
-   * Rendu graphique responsive
+   * Rendu graphique.
    */
   draw() {
     if (!this.#isLoaded) return;
 
     const { width, height } = this.canvas;
 
-    // 1. Dessiner la map en s'adaptant à la taille du canvas
+    // 1. Nettoyage du canvas
     this.ctx.clearRect(0, 0, width, height);
+
+    // 2. Dessin de la map (Adaptation responsive)
     this.ctx.drawImage(this.#mapImage, 0, 0, width, height);
 
-    // 2. Dessiner les entités
-    this.#entities.forEach((entity) => {
-      if (entity.draw) {
-        entity.draw(this.ctx);
-      }
-    });
-
-    // 3. Dessiner l'interface (HUD)
-    this.#drawHUD();
-  }
-
-  #drawHUD() {
-    this.ctx.fillStyle = "white";
-    this.ctx.font = "bold 20px Arial";
-    this.ctx.fillText(`Score: ${this.#score}`, 20, 40);
-  }
-
-  /**
-   * Sauvegarde la progression
-   */
-  saveProgress() {
-    Storage.save("td_save", { score: this.#score });
+    // 3. Dessin des entités via le Composite
+    this.#entityManager.draw(this.ctx);
   }
 }

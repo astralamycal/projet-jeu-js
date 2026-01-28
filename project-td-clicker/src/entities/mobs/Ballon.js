@@ -1,51 +1,70 @@
-import { Entity } from "../Entity";
+import { Entity } from "../Entity.js";
+import mapPaths from "../../utils/data/mapPaths.json";
+
+/**
+ * Niveau 3 d'héritage : L'ennemi principal du jeu.
+ */
 export class Ballon extends Entity {
+  #waypoints;
+  #waypointIndex = 1;
   #hp;
-  #speed;
-  #texturePath;
-  #isAlive;
+  #reward;
+  #color;
 
-  constructor(hp, speed, texturePath) {
-    super();
+  constructor(mapName, hp, speed, color, reward) {
+    const paths = mapPaths[mapName];
+    if (!paths) throw new Error(`Chemin pour ${mapName} introuvable`);
+
+    // On démarre au premier waypoint
+    super(paths[0].x, paths[0].y, 30, 30, speed);
+
+    this.#waypoints = paths;
     this.#hp = hp;
-    this.#speed = speed;
-    this.#texturePath = texturePath;
-    this.#isAlive = isAlive();
+    this.#color = color;
+    this.#reward = reward;
+
+    // Centrage visuel initial
+    this.x -= this.width / 2;
+    this.y -= this.height / 2;
   }
 
-  getHp() {
-    return this.#hp;
-  }
+  /**
+   * Logique de mouvement vers les waypoints (Pathfinding)
+   */
+  update() {
+    if (!this.isAlive) return;
 
-  getSpeed() {
-    return this.#speed;
-  }
+    // Si on a atteint le dernier point
+    if (this.#waypointIndex >= this.#waypoints.length) {
+      this.isAlive = false;
+      console.log("Dégâts au joueur !");
+      return;
+    }
 
-  getTexturePath() {
-    return this.#texturePath;
-  }
+    const target = this.#waypoints[this.#waypointIndex];
+    const center = this.center;
 
-  takeDamage(damage) {
-    this.#hp -= damage;
-    if (this.#hp < 0) {
-      this.#hp = 0;
+    // Calcul de l'angle vers la cible
+    const angle = Math.atan2(target.y - center.y, target.x - center.x);
+
+    // Déplacement fluide
+    this.x += Math.cos(angle) * this.speed;
+    this.y += Math.sin(angle) * this.speed;
+
+    // Vérification d'arrivée au waypoint (marge d'erreur = vitesse)
+    const dist = Math.hypot(target.x - center.x, target.y - center.y);
+    if (dist < this.speed) {
+      this.#waypointIndex++;
     }
   }
 
-  setSpeed(newSpeed) {
-    if (newSpeed > 0) {
-      this.#speed = newSpeed;
-    } else {
-      throw new Error("Speed cannot be lower than 0");
-    }
-  }
+  draw(ctx) {
+    if (!this.isAlive) return;
 
-  isAlive() {
-    if (this.#hp < 0) {
-      return true;
-    }
-    return false;
+    ctx.beginPath();
+    ctx.arc(this.center.x, this.center.y, this.width / 2, 0, Math.PI * 2);
+    ctx.fillStyle = this.#color;
+    ctx.fill();
+    ctx.closePath();
   }
-
-  update() {}
 }

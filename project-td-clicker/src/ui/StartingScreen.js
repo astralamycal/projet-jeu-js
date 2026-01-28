@@ -93,11 +93,6 @@ export class StartingScreen extends Screen {
   }
 
   draw() {
-    // if (!this.#isLoaded) {
-    //   console.error("Image de fond non chargée");
-    //   return;
-    // }
-
     // Algorithme "Cover" Responsive
     const ratio = Math.max(
       this.canvas.width / this.#bgImage.width,
