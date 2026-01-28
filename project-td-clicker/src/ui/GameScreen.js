@@ -3,11 +3,13 @@ import { Screen } from "./Screen.js";
 import { Map } from "../entities/Map.js";
 import { BallonManager } from "../managers/BallonManager.js";
 import { PlacementTileManager } from "../managers/PlacementTileManager.js";
+import { TowerManager } from "../managers/TowerManager.js";
 
 export class GameScreen extends Screen {
   #map;
   #ballonManager;
   #placementTileManager;
+  #TowerManager;
 
   // On initialise la souris avec des valeurs par défaut pour éviter le "undefined"
   #rawMouse = { x: 0, y: 0 };
@@ -23,6 +25,7 @@ export class GameScreen extends Screen {
       canvas,
       this.#rawMouse,
     );
+    this.#TowerManager = new TowerManager(this.#placementTileManager, canvas);
 
     // 2. Gestion des événements
     this.#initEventListeners();
@@ -75,6 +78,8 @@ export class GameScreen extends Screen {
     if (this.#ballonManager) {
       this.#ballonManager.update(dt);
     }
+
+    this.#TowerManager.update();
   }
 
   draw() {

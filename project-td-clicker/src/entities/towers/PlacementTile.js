@@ -12,10 +12,17 @@ export class PlacementTile extends GameObject {
       mouse.y <= this.y + 16;
   }
 
+  get isHovered() {
+    return this.#isHovered;
+  }
+
   draw(ctx) {
     if (this.#isHovered) {
-      ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
       ctx.fillRect(this.x, this.y, 16, 16);
+      this.#isHovered = true;
+    } else {
+      this.#isHovered = false;
     }
   }
 }

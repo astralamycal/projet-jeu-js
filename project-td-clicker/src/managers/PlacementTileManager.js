@@ -27,6 +27,10 @@ export class PlacementTileManager {
     });
   }
 
+  get placementTiles() {
+    return this.#placementTiles;
+  }
+
   update(virtualMouse) {
     // Sécurité : si virtualMouse est mal transmis, on arrête
     if (!virtualMouse) return;
