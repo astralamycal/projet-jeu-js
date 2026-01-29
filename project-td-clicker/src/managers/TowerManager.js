@@ -23,7 +23,7 @@ export class TowerManager {
   draw(ctx) {
     this.#towerList.forEach((tower) => {
       // On passe le pinceau reçu du GameScreen à chaque tour
-      tower.update(ctx);
+      tower.draw(ctx);
     });
   }
 }

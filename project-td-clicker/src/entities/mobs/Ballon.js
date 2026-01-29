@@ -4,27 +4,28 @@ import mapPaths from "../../utils/data/mapPaths.json";
 export class Ballon extends Entity {
   #waypoints;
   #waypointIndex = 1;
-  #color;
 
   constructor(mapName, color, speed, hp = 10) {
     const path = mapPaths[mapName];
     if (!path) throw new Error(`Path ${mapName} non trouvé`);
 
-    // ORDRE : x, y, width, height, hp, speed
-    super(path[0].x, path[0].y, 25, 25, hp, speed);
+    // 1. On génère le chemin vers le sprite en fonction de la couleur
+    const spritePath = `/assets/cookie.png`;
+
+    // 2. On passe le spritePath à Entity (7ème argument)
+    // ORDRE : x, y, width, height, hp, speed, spritePath
+    super(path[0].x, path[0].y, 25, 25, hp, speed, spritePath);
 
     this.#waypoints = path;
-    this.#color = color;
 
-    // Ajustement pour que le (x,y) de départ soit centré sur le premier point
+    // Ajustement pour centrer l'image sur le point de départ
     this.x -= this.width / 2;
     this.y -= this.height / 2;
   }
 
   update(dt) {
     if (this.#waypointIndex >= this.#waypoints.length) {
-      this.takeDamage(999); // Meurt pour être nettoyé par le Container
-      // ICI : déclencher un événement "perte de vie" si tu veux
+      this.takeDamage(999); // Meurt pour être nettoyé
       return;
     }
 
@@ -33,7 +34,7 @@ export class Ballon extends Entity {
     const dy = target.y - this.center.y;
     const distance = Math.hypot(dx, dy);
 
-    // On utilise la vitesse héritée !
+    // Utilisation de la vitesse héritée
     const moveStep = this.speed * (dt || 0.016) * 60;
 
     if (distance < moveStep) {
@@ -43,13 +44,5 @@ export class Ballon extends Entity {
       this.x += Math.cos(angle) * moveStep;
       this.y += Math.sin(angle) * moveStep;
     }
-  }
-
-  draw(ctx) {
-    ctx.beginPath();
-    ctx.arc(this.center.x, this.center.y, this.width / 2, 0, Math.PI * 2);
-    ctx.fillStyle = this.#color;
-    ctx.fill();
-    ctx.closePath();
   }
 }

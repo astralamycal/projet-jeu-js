@@ -1,4 +1,5 @@
-import { Entity } from "./Entity";
+// src/entities/Projectile.js
+import { Entity } from "./Entity.js"; // N'oublie pas l'extension .js si nécessaire
 
 export class Projectile extends Entity {
   #velocity = {
@@ -20,11 +21,13 @@ export class Projectile extends Entity {
   }
 
   draw(ctx) {
+    if (!ctx) return;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
+    // On utilise this.x et this.y mis à jour par l'update
+    ctx.arc(this.x, this.y, this.width / 2, 0, 2 * Math.PI);
     ctx.fillStyle = "#ff9100";
-    ctx.closePath();
     ctx.fill();
+    ctx.closePath();
   }
 
   update(ctx) {

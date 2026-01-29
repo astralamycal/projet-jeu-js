@@ -30,6 +30,9 @@ export class BallonManager {
   get currentRoundNumber() {
     return this.#currentRoundIndex + 1;
   }
+  get container() {
+    return this.#container;
+  }
 
   startNextRound() {
     if (this.#isSpawning) return;
