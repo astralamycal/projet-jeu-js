@@ -43,8 +43,8 @@ export class Projectile extends Entity {
         this.#targetBallon.center.y - this.y,
         this.#targetBallon.center.x - this.x,
       );
-      this.#velocity.x = Math.cos(angle) * 2;
-      this.#velocity.y = Math.sin(angle) * 2;
+      this.#velocity.x = Math.cos(angle) * 3;
+      this.#velocity.y = Math.sin(angle) * 3;
 
       this.x += this.#velocity.x;
       this.y += this.#velocity.y;
