@@ -14,7 +14,7 @@ export class GameScreen extends Screen {
 
   #rawMouse = { x: 0, y: 0 };
   #score = 0;
-  #money = 100;
+  #money = 0;
   #highScore = 0;
   #isGameOver = false;
 
@@ -32,7 +32,7 @@ export class GameScreen extends Screen {
   // Initialise ou réinitialise les composants du jeu
   #initGame() {
     this.#score = 0;
-    this.#money = 100;
+    this.#money = 800;
     this.#isGameOver = false;
 
     this.#map = new Map("./public/assets/map1.png");
@@ -113,7 +113,7 @@ export class GameScreen extends Screen {
   }
 
   #handleTowerPurchase(mouse) {
-    const TOWER_COST = 50;
+    const TOWER_COST = 500;
     const targetTile = this.#placementTileManager.getTileAt(mouse);
     if (
       targetTile &&
