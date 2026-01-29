@@ -9,15 +9,19 @@ export class Projectile extends Entity {
   #ballonManager;
   #targetBallon;
   #distanceTarget;
+  #targetReached = false;
 
-  constructor(x, y, width, height, hp, xSpeed, ySpeed, ballonManager) {
-    super(x, y, width, height, hp, xSpeed);
-    this.#velocity = {
-      x: xSpeed,
-      y: ySpeed,
-    };
+  constructor(x, y, hp, ballonManager, target) {
+    super(x, y, 7, 3, hp, 0);
     this.#ballonManager = ballonManager;
-    console.log(ballonManager);
+    this.#targetBallon = target;
+  }
+
+  get targetReached() {
+    return this.#targetReached;
+  }
+  get targetBallon() {
+    return this.#targetBallon;
   }
 
   draw(ctx) {
@@ -31,20 +35,23 @@ export class Projectile extends Entity {
   }
 
   update(ctx) {
-    if (this.#ballonManager.container.children[0]) {
-      this.#targetBallon = this.#ballonManager.container.children[0];
-
+    if (this.#targetBallon) {
       this.#distanceTarget = Math.hypot(
         this.#targetBallon.center.x - this.x,
         this.#targetBallon.center.y - this.y,
       );
 
+      if (this.#distanceTarget < this.#targetBallon.width / 2) {
+        //function to hit ballon
+        this.#targetReached = true;
+      }
+
       const angle = Math.atan2(
         this.#targetBallon.center.y - this.y,
         this.#targetBallon.center.x - this.x,
       );
-      this.#velocity.x = Math.cos(angle) * 3;
-      this.#velocity.y = Math.sin(angle) * 3;
+      this.#velocity.x = Math.cos(angle) * 4;
+      this.#velocity.y = Math.sin(angle) * 4;
 
       this.x += this.#velocity.x;
       this.y += this.#velocity.y;

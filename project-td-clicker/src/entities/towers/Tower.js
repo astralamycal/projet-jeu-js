@@ -8,34 +8,15 @@ export class Tower extends Entity {
   #projectiles = [];
   #center;
   #ballonManager;
+  #radius = 100;
   #target;
+  #validEnemies = [];
+  #frames = 0;
 
   constructor(x, y, ballonManager) {
     super(x, y, 16, 16, 1, 0, sprite);
     this.#center = this.center;
     this.#ballonManager = ballonManager;
-
-    this.#projectiles.push(
-      new Projectile(
-        this.#center.x,
-        this.#center.y,
-        10,
-        10,
-        10,
-        2,
-        2,
-        this.#ballonManager,
-      ),
-    );
-  }
-
-  findTarget() {}
-
-  draw(ctx) {
-    // Sécurité absolue : on vérifie que c'est bien le contexte
-    if (!ctx || typeof ctx.fillRect !== "function") return;
-
-    // ❌ SURTOUT PAS DE this.draw(ctx) ICI !
   }
 
   // ✅ 2. DRAW : Reçoit le contexte (ctx), gère uniquement l'image
@@ -46,10 +27,47 @@ export class Tower extends Entity {
     // Dessine l'archer (via GameObject/Entity)
     super.draw(ctx);
 
+    //ctx.fillStyle = "blue";
+    //ctx.beginPath();
+    //ctx.arc(this.#center.x, this.#center.y, this.#radius, 0, Math.PI * 2);
+    //ctx.fill();
+
     // Dessine chaque projectile
-    this.#projectiles.forEach((projectile) => {
-      // On passe ctx, qui est l'OBJET de dessin
+    for (let i = this.#projectiles.length - 1; i >= 0; i--) {
+      const projectile = this.#projectiles[i];
       projectile.update(ctx);
-    });
+      if (projectile.targetReached) {
+        projectile.targetBallon.takeDamage(projectile.hp);
+        this.#projectiles.splice(i, 1);
+      }
+    }
+
+    this.update(ctx);
+  }
+
+  update(ctx) {
+    this.#validEnemies = this.#ballonManager.container.children.filter(
+      (ballon) => {
+        return Math.hypot(ballon.x - this.x, ballon.y - this.y) <= this.#radius;
+      },
+    );
+    this.#target = this.#validEnemies[0];
+
+    if (this.#target) {
+      if (this.#frames % 180 === 0) {
+        this.#projectiles.push(
+          new Projectile(
+            this.x,
+            this.y,
+            10,
+            this.#ballonManager,
+            this.#validEnemies[0],
+          ),
+        );
+      }
+      this.#frames++;
+    } else {
+      this.#frames = 0;
+    }
   }
 }

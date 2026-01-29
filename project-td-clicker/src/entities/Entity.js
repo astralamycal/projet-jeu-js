@@ -17,6 +17,10 @@ export class Entity extends GameObject {
     this.#speed = speed;
   }
 
+  get position() {
+    return { x: this.x, y: this.y };
+  }
+
   get hp() {
     return this.#hp;
   }
