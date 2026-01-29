@@ -28,7 +28,7 @@ export class GameScreen extends Screen {
     );
 
     // Initialisation du TowerManager
-    this.#TowerManager = new TowerManager();
+    this.#TowerManager = new TowerManager(this.#ballonManager);
 
     this.#initEventListeners();
     this.#initClicker();

@@ -1,13 +1,16 @@
 import { Tower } from "../entities/towers/Tower.js";
 export class TowerManager {
   #towerList = [];
+  #ballonManager;
 
   // Le constructeur n'a plus besoin de stocker ctx ou canvas !
-  constructor() {}
+  constructor(ballonManager) {
+    this.#ballonManager = ballonManager;
+  }
 
   addTower(x, y) {
     // On crée la tour simplement avec sa position
-    this.#towerList.push(new Tower(x, y));
+    this.#towerList.push(new Tower(x, y, this.#ballonManager));
   }
 
   update(ctx) {

@@ -7,6 +7,10 @@ export class Container extends GameObject {
     super(0, 0);
   }
 
+  get children() {
+    return this.#children;
+  }
+
   add(child) {
     if (child instanceof GameObject) {
       this.#children.push(child);

@@ -17,6 +17,10 @@ export class BallonManager {
     this.#mapName = mapName;
   }
 
+  get container() {
+    return this.#container;
+  }
+
   get isRoundActive() {
     return this.#isSpawning || this.#container.count > 0;
   }

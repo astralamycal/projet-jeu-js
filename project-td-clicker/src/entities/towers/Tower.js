@@ -4,12 +4,24 @@ import { Projectile } from "../Projectile.js";
 export class Tower extends Entity {
   #projectiles = [];
   #center;
+  #ballonManager;
 
-  constructor(x, y) {
+  constructor(x, y, ballonManager) {
     super(x, y, 16, 16, 1, 0);
     this.#center = this.center;
+    this.#ballonManager = ballonManager;
+
     this.#projectiles.push(
-      new Projectile(this.#center.x, this.#center.y, 10, 10, 10, 2, 2),
+      new Projectile(
+        this.#center.x,
+        this.#center.y,
+        10,
+        10,
+        10,
+        2,
+        2,
+        this.#ballonManager,
+      ),
     );
   }
 
