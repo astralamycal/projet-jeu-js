@@ -83,11 +83,16 @@ export class GameScreen extends Screen {
   }
 
   #isInside(pos, obj) {
+    // On récupère la largeur (soit .w, soit .width)
+    const w = obj.w ?? obj.width;
+    // On récupère la hauteur (soit .h, soit .height)
+    const h = obj.h ?? obj.height;
+
     return (
       pos.x >= obj.x &&
-      pos.x <= obj.x + obj.w &&
+      pos.x <= obj.x + w &&
       pos.y >= obj.y &&
-      pos.y <= obj.y + obj.h
+      pos.y <= obj.y + h
     );
   }
 

@@ -1,6 +1,8 @@
 // src/entities/Projectile.js
 import { Entity } from "./Entity.js"; // N'oublie pas l'extension .js si nécessaire
 
+const sprite = "/assets/spr_tower_archer_projectile.png";
+
 export class Projectile extends Entity {
   #velocity = {
     x: 0,
@@ -12,7 +14,7 @@ export class Projectile extends Entity {
   #targetReached = false;
 
   constructor(x, y, hp, ballonManager, target) {
-    super(x, y, 7, 3, hp, 0);
+    super(x, y, 7, 3, hp, 0, sprite);
     this.#ballonManager = ballonManager;
     this.#targetBallon = target;
   }
@@ -25,13 +27,15 @@ export class Projectile extends Entity {
   }
 
   draw(ctx) {
-    if (!ctx) return;
-    ctx.beginPath();
-    // On utilise this.x et this.y mis à jour par l'update
-    ctx.arc(this.x, this.y, this.width / 2, 0, 2 * Math.PI);
-    ctx.fillStyle = "#ff9100";
-    ctx.fill();
-    ctx.closePath();
+    // if (!ctx) return;
+    // ctx.beginPath();
+    // // On utilise this.x et this.y mis à jour par l'update
+    // ctx.arc(this.x, this.y, this.width / 2, 0, 2 * Math.PI);
+    // ctx.fillStyle = "#ff9100";
+    // ctx.fill();
+    // ctx.closePath();
+
+    super.draw(ctx);
   }
 
   update(ctx) {
@@ -50,8 +54,8 @@ export class Projectile extends Entity {
         this.#targetBallon.center.y - this.y,
         this.#targetBallon.center.x - this.x,
       );
-      this.#velocity.x = Math.cos(angle) * 4;
-      this.#velocity.y = Math.sin(angle) * 4;
+      this.#velocity.x = Math.cos(angle) * 6;
+      this.#velocity.y = Math.sin(angle) * 6;
 
       this.x += this.#velocity.x;
       this.y += this.#velocity.y;
