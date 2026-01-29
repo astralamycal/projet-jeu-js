@@ -42,20 +42,12 @@ export class Container extends GameObject {
    */
   #cleanup() {
     this.#children = this.#children.filter((child) => {
-      // 1. Si c'est une méthode : child.isAlive()
+      // On utilise la méthode de l'Entity pour savoir s'il faut le garder
       if (typeof child.isAlive === "function") {
         return child.isAlive();
       }
-      // 2. Si c'est une propriété : child.isAlive
-      if (child.isAlive !== undefined) {
-        return child.isAlive !== false;
-      }
-      // 3. Par défaut, on garde l'objet
+      // Si l'objet n'a pas de système de vie (ex: une particule), on le garde
       return true;
     });
-  }
-
-  get count() {
-    return this.#children.length;
   }
 }

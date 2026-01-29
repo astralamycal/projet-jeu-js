@@ -96,8 +96,14 @@ export class BallonManager {
     };
   }
 
-  isRoundActive() {
+  get isRoundActive() {
     return this.#isSpawning || this.#container.count > 0;
+  }
+
+  // src/managers/BallonManager.js
+  get enemies() {
+    // On renvoie la liste des enfants du container (les ballons)
+    return this.#container.children;
   }
 
   draw(ctx) {
