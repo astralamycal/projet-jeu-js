@@ -2,18 +2,24 @@
 import { Entity } from "./Entity.js"; // N'oublie pas l'extension .js si nécessaire
 
 export class Projectile extends Entity {
-  #velocity = { x: 0, y: 0 };
+  #velocity = {
+    x: 0,
+    y: 0,
+  };
+  #ballonManager;
+  #targetBallon;
+  #distanceTarget;
 
-  constructor(x, y, width, height, hp, xSpeed, ySpeed) {
-    // Note: on a retiré "canvas" qui ne servait pas ici
+  constructor(x, y, width, height, hp, xSpeed, ySpeed, ballonManager) {
     super(x, y, width, height, hp, xSpeed);
     this.#velocity = {
       x: xSpeed,
       y: ySpeed,
     };
+    this.#ballonManager = ballonManager;
+    console.log(ballonManager);
   }
 
-  // ✅ La méthode draw s'occupe UNIQUEMENT de l'affichage
   draw(ctx) {
     if (!ctx) return;
     ctx.beginPath();
@@ -24,16 +30,25 @@ export class Projectile extends Entity {
     ctx.closePath();
   }
 
-  // ✅ La méthode update s'occupe UNIQUEMENT du mouvement
-  // Elle reçoit dt (Delta Time), pas ctx !
-  update(dt) {
-    // On multiplie par dt pour que le mouvement soit fluide peu importe les FPS
-    // Si dt n'est pas passé, on met une valeur par défaut (0.016)
-    const delta = dt || 0.016;
+  update(ctx) {
+    if (this.#ballonManager.container.children[0]) {
+      this.#targetBallon = this.#ballonManager.container.children[0];
 
-    this.x += this.#velocity.x * delta * 60;
-    this.y += this.#velocity.y * delta * 60;
+      this.#distanceTarget = Math.hypot(
+        this.#targetBallon.center.x - this.x,
+        this.#targetBallon.center.y - this.y,
+      );
 
-    // ❌ SURTOUT PAS DE this.draw(ctx) ICI !
+      const angle = Math.atan2(
+        this.#targetBallon.center.y - this.y,
+        this.#targetBallon.center.x - this.x,
+      );
+      this.#velocity.x = Math.cos(angle) * 2;
+      this.#velocity.y = Math.sin(angle) * 2;
+
+      this.x += this.#velocity.x;
+      this.y += this.#velocity.y;
+    }
+    this.draw(ctx);
   }
 }

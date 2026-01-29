@@ -6,22 +6,34 @@ const sprite = "/assets/spr_tower_archer.png";
 
 export class Tower extends Entity {
   #projectiles = [];
+  #center;
+  #ballonManager;
+  #target;
 
-  constructor(x, y) {
+  constructor(x, y, ballonManager) {
     super(x, y, 16, 16, 1, 0, sprite);
+    this.#center = this.center;
+    this.#ballonManager = ballonManager;
 
-    // On crée un projectile de test qui part en diagonale
     this.#projectiles.push(
-      new Projectile(this.center.x, this.center.y, 10, 10, 10, 2, 2),
+      new Projectile(
+        this.#center.x,
+        this.#center.y,
+        10,
+        10,
+        10,
+        2,
+        2,
+        this.#ballonManager,
+      ),
     );
   }
 
-  // ✅ 1. UPDATE : Reçoit le temps (dt), gère uniquement la logique
-  update(dt) {
-    this.#projectiles.forEach((projectile) => {
-      // On passe dt, qui est un NOMBRE
-      projectile.update(dt);
-    });
+  findTarget() {}
+
+  draw(ctx) {
+    // Sécurité absolue : on vérifie que c'est bien le contexte
+    if (!ctx || typeof ctx.fillRect !== "function") return;
 
     // ❌ SURTOUT PAS DE this.draw(ctx) ICI !
   }
@@ -29,6 +41,7 @@ export class Tower extends Entity {
   // ✅ 2. DRAW : Reçoit le contexte (ctx), gère uniquement l'image
   draw(ctx) {
     if (!ctx) return;
+    // this.#target = findTarget();
 
     // Dessine l'archer (via GameObject/Entity)
     super.draw(ctx);
@@ -36,7 +49,7 @@ export class Tower extends Entity {
     // Dessine chaque projectile
     this.#projectiles.forEach((projectile) => {
       // On passe ctx, qui est l'OBJET de dessin
-      projectile.draw(ctx);
+      projectile.update(ctx);
     });
   }
 }

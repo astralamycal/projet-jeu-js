@@ -27,7 +27,8 @@ export class GameScreen extends Screen {
       this.#rawMouse,
     );
 
-    this.#TowerManager = new TowerManager();
+    // Initialisation du TowerManager
+    this.#TowerManager = new TowerManager(this.#ballonManager);
 
     // 3. Initialisation du CookieButton (x, y, largeur, hauteur)
     this.#cookieButton = new CookieButton(10, 250, 60, 60);
