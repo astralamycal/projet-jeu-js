@@ -8,7 +8,6 @@ export class CookieButton extends GameObject {
   }
 
   /**
-   * On surcharge la méthode draw pour inclure l'effet visuel d'activation.
    * @param {CanvasRenderingContext2D} ctx
    * @param {boolean} isActive - État du round pour le filtre
    */
@@ -22,7 +21,7 @@ export class CookieButton extends GameObject {
       ctx.filter = "grayscale(100%) opacity(50%)";
     }
 
-    // On appelle le draw du GameObject qui gère l'affichage du sprite
+    // Gère l'affichage du sprite
     super.draw(ctx);
 
     ctx.restore();

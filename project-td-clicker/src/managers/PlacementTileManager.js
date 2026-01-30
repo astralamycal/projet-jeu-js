@@ -32,10 +32,8 @@ export class PlacementTileManager {
   }
 
   getTileAt(mouse) {
-    // On parcourt toutes les tuiles de placement
+    // get active tile
     return this.#placementTiles.find((tile) => {
-      // Collision Point-Rectangle :
-      // On vérifie si la souris est entre x et x+16, et entre y et y+16
       return (
         mouse.x >= tile.x &&
         mouse.x <= tile.x + 16 &&
@@ -46,7 +44,7 @@ export class PlacementTileManager {
   }
 
   update(virtualMouse) {
-    // Sécurité : si virtualMouse est mal transmis, on arrête
+    // si virtualMouse est mal transmis, on arrête
     if (!virtualMouse) return;
 
     this.#placementTiles.forEach((tile) => {
@@ -56,7 +54,7 @@ export class PlacementTileManager {
 
   draw(ctx) {
     this.#placementTiles.forEach((tile) => {
-      // On vérifie par sécurité que la méthode draw existe sur la tuile
+      // On vérifie que la méthode draw existe sur la tuile
       if (typeof tile.draw === "function") {
         tile.draw(ctx);
       }

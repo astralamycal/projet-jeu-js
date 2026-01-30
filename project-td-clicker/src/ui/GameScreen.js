@@ -23,7 +23,7 @@ export class GameScreen extends Screen {
 
   constructor(canvas, ctx) {
     super(canvas, ctx);
-    this.#initGame(); // On utilise une méthode d'initialisation
+    this.#initGame();
     this.#loadHighScore();
     this.#initEventListeners();
     this.#initClicker();
@@ -35,6 +35,7 @@ export class GameScreen extends Screen {
     this.#money = 800;
     this.#isGameOver = false;
 
+    // les managers et la map
     this.#map = new Map("./public/assets/map1.png");
     this.#ballonManager = new BallonManager("map1");
     this.#placementTileManager = new PlacementTileManager(
@@ -49,6 +50,7 @@ export class GameScreen extends Screen {
     this.#retryBtnArea.y = this.canvas.height / 2 + 80;
   }
 
+  //localstorage
   #loadHighScore() {
     const saved = localStorage.getItem("towerDefense_highScore");
     this.#highScore = saved ? parseInt(saved) : 0;
@@ -101,6 +103,7 @@ export class GameScreen extends Screen {
   }
 
   #initEventListeners() {
+    // spacebar pour rounds
     this.canvas.addEventListener("mousemove", (e) => {
       const rect = this.canvas.getBoundingClientRect();
       this.#rawMouse.x = e.clientX - rect.left;
@@ -127,6 +130,7 @@ export class GameScreen extends Screen {
   }
 
   getVirtualMousePos() {
+    // Gère décallage entre canvas et html
     const { width, height } = this.canvas;
     const scale = Math.min(width / Map.WIDTH, height / Map.HEIGHT);
     const offsetX = (width - Map.WIDTH * scale) / 2;
@@ -165,6 +169,7 @@ export class GameScreen extends Screen {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, width, height);
 
+    // responsive canvas
     const scale = Math.min(width / Map.WIDTH, height / Map.HEIGHT);
     ctx.save();
     ctx.translate(width / 2, height / 2);
@@ -182,6 +187,7 @@ export class GameScreen extends Screen {
   }
 
   #drawHUD() {
+    // texte au dessus de la map
     const ctx = this.ctx;
     ctx.fillStyle = "white";
     ctx.font = "bold 16px Arial";
