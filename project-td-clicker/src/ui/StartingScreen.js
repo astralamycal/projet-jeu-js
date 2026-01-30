@@ -14,13 +14,12 @@ export class StartingScreen extends Screen {
   #initBg(images) {
     const randomSrc = images[Math.floor(Math.random() * images.length)];
 
-    // Règle d'or : définir le callback AVANT la source
     this.#bgImage.onload = () => {
       this.#isLoaded = true;
     };
 
     this.#bgImage.onerror = () => {
-      // Ici, c'est une vraie erreur critique
+      // erreur critique
       console.error(
         "Erreur critique : Impossible de charger l'image",
         randomSrc,
