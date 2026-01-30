@@ -1,4 +1,5 @@
 import { Game } from "./core/Game.js";
+import { Entity } from "./entities/Entity.js";
 
 // Attendre que le DOM soit prêt pour éviter les erreurs d'accès
 window.addEventListener("DOMContentLoaded", () => {
