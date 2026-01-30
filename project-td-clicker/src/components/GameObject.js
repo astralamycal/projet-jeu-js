@@ -8,6 +8,7 @@ export class GameObject {
     this.width = width;
     this.height = height;
 
+    // loads image for object
     if (spritePath) {
       this.#sprite = new Image();
       this.#sprite.src = spritePath;

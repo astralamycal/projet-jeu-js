@@ -16,6 +16,7 @@ export class PlacementTile extends GameObject {
     return this.#isHovered;
   }
 
+  // shows grey tile on hover
   draw(ctx) {
     if (this.#isHovered) {
       ctx.fillStyle = "rgba(255, 255, 255, 0.4)";

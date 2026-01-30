@@ -1,5 +1,4 @@
-// src/entities/Projectile.js
-import { Entity } from "./Entity.js"; // N'oublie pas l'extension .js si nécessaire
+import { Entity } from "./Entity.js";
 
 const sprite = "/assets/spr_tower_archer_projectile.png";
 
@@ -26,19 +25,8 @@ export class Projectile extends Entity {
     return this.#targetBallon;
   }
 
-  draw(ctx) {
-    // if (!ctx) return;
-    // ctx.beginPath();
-    // // On utilise this.x et this.y mis à jour par l'update
-    // ctx.arc(this.x, this.y, this.width / 2, 0, 2 * Math.PI);
-    // ctx.fillStyle = "#ff9100";
-    // ctx.fill();
-    // ctx.closePath();
-
-    super.draw(ctx);
-  }
-
   update(ctx) {
+    // get distance entre projectile et target
     if (this.#targetBallon) {
       this.#distanceTarget = Math.hypot(
         this.#targetBallon.center.x - this.x,
@@ -46,10 +34,11 @@ export class Projectile extends Entity {
       );
 
       if (this.#distanceTarget < this.#targetBallon.width / 2) {
-        //function to hit ballon
+        //function to hit ballon si collision
         this.#targetReached = true;
       }
 
+      //pathfinding pour projectile
       const angle = Math.atan2(
         this.#targetBallon.center.y - this.y,
         this.#targetBallon.center.x - this.x,

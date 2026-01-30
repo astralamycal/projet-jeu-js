@@ -11,6 +11,7 @@ export class Container extends GameObject {
     return this.#children;
   }
 
+  // adds cookies to a list of cookies
   add(child) {
     if (child instanceof GameObject) {
       this.#children.push(child);
@@ -23,6 +24,7 @@ export class Container extends GameObject {
     this.#children = this.#children.filter((c) => c !== child);
   }
 
+  //updates every cookie in list
   update(dt) {
     this.#children.forEach((child) => {
       if (typeof child.update === "function") {
@@ -33,6 +35,7 @@ export class Container extends GameObject {
     this.#cleanup();
   }
 
+  //draws every cookie in list
   draw(ctx) {
     this.#children.forEach((child) => {
       if (typeof child.draw === "function") {
@@ -41,17 +44,14 @@ export class Container extends GameObject {
     });
   }
 
-  /**
-   * Nettoyage intelligent : vérifie si c'est une méthode ou une propriété
-   */
+  // vérifie si c'est une méthode ou une propriété
   #cleanup() {
     this.#children = this.#children.filter((child) => {
       // On utilise la méthode de l'Entity pour savoir s'il faut le garder
       if (typeof child.isAlive === "function") {
         return child.isAlive();
       }
-      // Si l'objet n'a pas de système de vie (ex: une particule), on le garde
-      return true;
+      return true; // save state in case of no isAlive method
     });
   }
 }

@@ -1,5 +1,4 @@
 import { Engine } from "./Engine.js";
-import { Container } from "../components/Container.js";
 import { StartingScreen } from "../ui/StartingScreen.js";
 import { GameScreen } from "../ui/GameScreen.js";
 
@@ -8,7 +7,6 @@ import { GameScreen } from "../ui/GameScreen.js";
  * Gère la transition entre les écrans et la réactivité du canvas.
  */
 export class Game {
-  // Propriétés privées (Encapsulation)
   #canvas;
   #ctx;
   #engine;
@@ -16,7 +14,7 @@ export class Game {
 
   constructor(canvasId) {
     try {
-      // Initialisation du contexte graphique
+      // get contexte graphique
       this.#canvas = document.getElementById(canvasId);
       if (!this.#canvas) {
         throw new Error(`Élément canvas avec l'id '${canvasId}' introuvable.`);
@@ -35,7 +33,7 @@ export class Game {
    * Configure les écrans, les événements et le moteur.
    */
   #init() {
-    // Liste des sources d'images pour le menu aléatoire
+    // list of images for main menu
     const menuImages = [
       "./public/assets/main-menu/Summer2.png",
       "./public/assets/main-menu/Summer3.png",

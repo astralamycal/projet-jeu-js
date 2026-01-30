@@ -1,4 +1,3 @@
-// src/entities/Map.js
 import { GameObject } from "../components/GameObject.js";
 
 export class Map extends GameObject {
@@ -20,7 +19,6 @@ export class Map extends GameObject {
   draw(ctx) {
     if (!this.#isLoaded) return;
 
-    // On dessine l'image exactement en 480x320
     // (Le scaling sera géré par le GameScreen pour le responsive)
     ctx.drawImage(this.#image, 0, 0, Map.WIDTH, Map.HEIGHT);
   }

@@ -4,7 +4,7 @@ import mapPaths from "../../utils/data/mapPaths.json";
 export class Ballon extends Entity {
   #waypoints;
   #waypointIndex = 1;
-  #hasReachedEnd = false; // ✅ On déclare la variable ici pour pouvoir l'utiliser
+  #hasReachedEnd = false;
 
   constructor(mapName, color, speed, hp = 10) {
     const path = mapPaths[mapName];
@@ -22,9 +22,6 @@ export class Ballon extends Entity {
     this.y -= this.height / 2;
   }
 
-  /**
-   * ✅ Le "pont" vers l'extérieur : permet au manager de lire l'état
-   */
   get hasReachedEnd() {
     return this.#hasReachedEnd;
   }
@@ -33,8 +30,7 @@ export class Ballon extends Entity {
     // Si on a atteint le dernier point du chemin
     if (this.#waypointIndex >= this.#waypoints.length) {
       this.#hasReachedEnd = true;
-      // Note : on ne met pas takeDamage(999) ici, car on veut que le
-      // Manager ait le temps de compter la fuite dans sa boucle.
+      // manager gère la fin
       return;
     }
 
@@ -43,7 +39,7 @@ export class Ballon extends Entity {
     const dy = target.y - this.center.y;
     const distance = Math.hypot(dx, dy);
 
-    // Calcul du pas de mouvement fluide
+    // Calcul du mouvement
     const moveStep = this.speed * (dt || 0.016) * 60;
 
     if (distance < moveStep) {

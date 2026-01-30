@@ -19,18 +19,11 @@ export class Tower extends Entity {
     this.#ballonManager = ballonManager;
   }
 
-  // ✅ 2. DRAW : Reçoit le contexte (ctx), gère uniquement l'image
   draw(ctx) {
     if (!ctx) return;
-    // this.#target = findTarget();
 
-    // Dessine l'archer (via GameObject/Entity)
+    // Dessine la tour (via GameObject/Entity)
     super.draw(ctx);
-
-    //ctx.fillStyle = "blue";
-    //ctx.beginPath();
-    //ctx.arc(this.#center.x, this.#center.y, this.#radius, 0, Math.PI * 2);
-    //ctx.fill();
 
     // Dessine chaque projectile
     for (let i = this.#projectiles.length - 1; i >= 0; i--) {
@@ -46,6 +39,7 @@ export class Tower extends Entity {
   }
 
   update(ctx) {
+    //update liste des cookies dans la range de la tour
     this.#validEnemies = this.#ballonManager.container.children.filter(
       (ballon) => {
         return Math.hypot(ballon.x - this.x, ballon.y - this.y) <= this.#radius;
@@ -53,6 +47,7 @@ export class Tower extends Entity {
     );
     this.#target = this.#validEnemies[0];
 
+    // si cookie dans range, création de projectile
     if (this.#target) {
       if (this.#frames % 120 === 0) {
         this.#projectiles.push(
